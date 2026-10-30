@@ -28,6 +28,7 @@ function render(){
  renderBars();
  const max=Math.max(1,...items.map(r=>val(r)??0));
  $('maternal').innerHTML=items.map(r=>`<div class="maternal-item"><div class="maternal-info"><span>${escape(r.name)}</span><strong>${fmt(val(r))}</strong></div><div class="bar-track"><div class="bar-fill" style="width:${100*(val(r)??0)/max}%"></div></div></div>`).join('');
+ renderMeasures();
  $('valueHeading').textContent=selected()==='all'?'REPORTED TOTAL':'FACILITY VALUE'; filter();
 }
 function renderBars(){

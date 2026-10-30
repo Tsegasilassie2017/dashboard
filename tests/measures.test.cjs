@@ -1,0 +1,6 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const M=require('../measures.js');
+function data(n,d){return {facilities:['A'],indicators:[{code:'N',total:n,values:[n]},{code:'D',total:d,values:[d]}]}}
+const m={numerator:'N',denominator:'D',kind:'ratio',direction:'higher'};
+test('ratios preserve missing and zero denominator; zero numerator remains zero',()=>{assert.equal(M.calculate(data(null,10),m).value,null);assert.equal(M.calculate(data(1,0),m).value,null);assert.equal(M.calculate(data(0,10),m).value,0);assert.equal(M.calculate(data(5,10),m).value,50)});
+test('targets are optional and direction aware; outliers remain visible',()=>{assert.equal(M.calculate(data(5,10),m).status,'neutral');assert.equal(M.calculate(data(5,10),m,'all',60).status,'warning');assert.equal(M.calculate(data(5,10),{...m,direction:'lower'},'all',60).status,'good');const r=M.calculate(data(12,10),{...m,kind:'dropout'});assert.equal(r.value,-20);assert.equal(r.status,'invalid')});
+test('total mismatch requires all cells, duplicate codes fail closed',()=>{let d=data(3,10);d.indicators[0].total=4;let q=M.quality(d,d.indicators)[0];assert.equal(q.mismatch,1);d.indicators[0].values[0]=null;assert.equal(M.quality(d,d.indicators)[0].mismatch,0);d.indicators.push({...d.indicators[1]});assert.equal(M.calculate(d,m).value,null)});

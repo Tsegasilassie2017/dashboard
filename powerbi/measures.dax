@@ -1,0 +1,218 @@
+// Import-ready measure definitions: create each measure separately in Power BI.
+// See README.md for the required model and percentage formatting.
+
+// Family planning: New acceptors as a share of new and repeat acceptors.
+New acceptor share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Age.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Age.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Age"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Age"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+New acceptor share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Age.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Age.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Age"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Age"))
+VAR R = [New acceptor share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Family planning: Method mix; no universal preferred share.
+Implant share among new acceptors =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Mtd.1.3"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Mtd.1.3"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Mtd.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Mtd.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Implant share among new acceptors Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Mtd.1.3"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Mtd.1.3"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAR_Mtd.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAR_Mtd.1"))
+VAR R = [Implant share among new acceptors]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Comprehensive abortion care: Counts may cover different populations; not patient-level uptake.
+Post-abortion FP service ratio =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAC.MA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAC.MA.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAC.Tr.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAC.Tr.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Post-abortion FP service ratio Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAC.MA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAC.MA.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_CAC.Tr.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_CAC.Tr.1"))
+VAR R = [Post-abortion FP service ratio]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Adolescent and youth health: Among adolescents screened; not population prevalence.
+Adolescent underweight screening share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_Adl&Yo_SUW"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_Adl&Yo_SUW"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_Adl&Yo.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_Adl&Yo.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Adolescent underweight screening share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_Adl&Yo_SUW"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_Adl&Yo_SUW"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_Adl&Yo.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_Adl&Yo.1"))
+VAR R = [Adolescent underweight screening share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Antenatal care: Period service counts; not cohort retention or population coverage.
+ANC4+ / ANC1 service ratio =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC4+_MA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC4+_MA.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+ANC4+ / ANC1 service ratio Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC4+_MA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC4+_MA.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1"))
+VAR R = [ANC4+ / ANC1 service ratio]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Antenatal care: Period service counts; not cohort retention.
+ANC8+ / ANC1 service ratio =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC8+."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC8+."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+ANC8+ / ANC1 service ratio Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC8+."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC8+."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1"))
+VAR R = [ANC8+ / ANC1 service ratio]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Antenatal care: First ANC contacts at or before 12 weeks.
+Early ANC first-contact share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Early ANC first-contact share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_ANC1_GA.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_ANC1_GA.1"))
+VAR R = [Early ANC first-contact share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Postnatal care: Visits within 7 days per reported live birth; not unique-woman coverage.
+PNC / live-birth service ratio =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_EPNC.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_EPNC.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_SBR.LB."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_SBR.LB."))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+PNC / live-birth service ratio Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_EPNC.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_EPNC.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_SBR.LB."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_SBR.LB."))
+VAR R = [PNC / live-birth service ratio]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Postnatal care: Share of reported postnatal visits within 7 days.
+PNC 0–24-hour visit share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_EPNC.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_EPNC.1.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_EPNC.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_EPNC.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+PNC 0–24-hour visit share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_EPNC.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_EPNC.1.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MAT_EPNC.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MAT_EPNC.1"))
+VAR R = [PNC 0–24-hour visit share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// PMTCT: Positive results among infants tested at 0–2 months; not a transmission-rate estimate.
+Early infant HIV test positivity =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MTCT_HEI_EID.1.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MTCT_HEI_EID.1.1.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MTCT_HEI_EID.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MTCT_HEI_EID.1.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Early infant HIV test positivity Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MTCT_HEI_EID.1.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MTCT_HEI_EID.1.1.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "MTCT_HEI_EID.1.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "MTCT_HEI_EID.1.1"))
+VAR R = [Early infant HIV test positivity]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// EPI: (Dose 1 − dose 3) / dose 1. Period counts are not a linked cohort.
+Pentavalent dose dropout proxy =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_DPT3.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_DPT3.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_DPT1.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_DPT1.1."))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(D - N, D))
+
+Pentavalent dose dropout proxy Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_DPT3.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_DPT3.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_DPT1.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_DPT1.1."))
+VAR R = [Pentavalent dose dropout proxy]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// EPI: (Opened − given) / opened; excludes unopened-stock losses.
+Pentavalent opened-dose wastage =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_VWR_Penta_giv."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_VWR_Penta_giv."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_VWR_Penta_opn."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_VWR_Penta_opn."))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(D - N, D))
+
+Pentavalent opened-dose wastage Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_VWR_Penta_giv."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_VWR_Penta_giv."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "EPI_VWR_Penta_opn."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "EPI_VWR_Penta_opn."))
+VAR R = [Pentavalent opened-dose wastage]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Child health: Initiated among reported eligible low-weight/premature newborns.
+KMC initiation share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_KMC.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_KMC.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_KMC.2."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_KMC.2."))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+KMC initiation share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_KMC.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_KMC.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_KMC.2."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_KMC.2."))
+VAR R = [KMC initiation share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Child health: Reported survived among resuscitated neonates.
+Neonatal resuscitation survival share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_ASPH.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_ASPH.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_ASPH.2."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_ASPH.2."))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Neonatal resuscitation survival share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_ASPH.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_ASPH.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_ASPH.2."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_ASPH.2."))
+VAR R = [Neonatal resuscitation survival share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Nutrition: Birthweight <2,500 g among weighed live births.
+Low-birthweight share among weighed births =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_LBW.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_LBW.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_LBW.2."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_LBW.2."))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Low-birthweight share among weighed births Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_LBW.1."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_LBW.1."))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_LBW.2."), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_LBW.2."))
+VAR R = [Low-birthweight share among weighed births]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// Nutrition: Severe acute malnutrition among children screened; not population prevalence.
+SAM share among screened under-5s =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_U5SMN.SAM.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_U5SMN.SAM.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_U5SMN.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_U5SMN.1"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+SAM share among screened under-5s Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_U5SMN.SAM.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_U5SMN.SAM.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "NUT_U5SMN.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "NUT_U5SMN.1"))
+VAR R = [SAM share among screened under-5s]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// ECD: Confirmed developmental delay among children assessed by status.
+Developmental delay screening share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS.2"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS.2"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Developmental delay screening share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS.2"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS.2"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS"))
+VAR R = [Developmental delay screening share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
+
+// ECD: Suspected delay among children assessed by status; not a diagnosis.
+Suspected developmental delay screening share =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS"))
+RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
+
+Suspected developmental delay screening share Input Review =
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS.1"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS.1"))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), Observations[Code] = "CH_CHDMS"), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), ReportedTotals[Code] = "CH_CHDMS"))
+VAR R = [Suspected developmental delay screening share]
+RETURN SWITCH(TRUE(), ISBLANK(N) || ISBLANK(D), "Missing input", D = 0, "Zero denominator", N < 0 || D < 0 || R < 0 || R > 1, "Review data / period alignment", "Calculable; target not assessed")
