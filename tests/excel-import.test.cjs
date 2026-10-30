@@ -1,0 +1,4 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const {parseRows}=require('../excel-import.js');
+const rows=[['Dataset (Test period)'],['S.No','Activity','Facility A','Facility B','Total'],['RMH','Maternal',''],['MAT_ANC1_GA.1','First contact','1,200','',1200]];
+test('extracts facilities, period, category, numbers and missing values',()=>{const d=parseRows(rows);assert.deepEqual(d.facilities,['Facility A','Facility B']);assert.equal(d.period,'Test period');assert.deepEqual(d.indicators[0],{code:'MAT_ANC1_GA.1',name:'First contact',section:'Maternal',values:[1200,null],total:1200})});
+test('rejects unsupported layouts and invalid numeric cells',()=>{assert.throws(()=>parseRows([['Other data']]),/S.No/);assert.throws(()=>parseRows([...rows.slice(0,3),['X','Broken','bad',2,2]]),/Non-numeric/)});
