@@ -1,0 +1,3 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const {scope,categories}=require('../mch-scope.js');
+test('includes cutoff and excludes subsequent services, normalizes whitespace',()=>{const d=scope({indicators:[{code:'MAT_CAR_Age'},{code:'MTCT_TST.1.'},{code:'CH_CHDM'},{code:'NUT_Adl&Yo_SVObe_1.1. 4'},{code:'HIV_HTS'}]});assert.equal(d.indicators.length,4);assert.deepEqual(d.indicators.map(r=>r.section),['Family planning','PMTCT','ECD','Adolescent and youth health']);assert.equal(categories.length,10)});
+test('missing cutoff rejects unsupported scope rather than retaining unrelated data',()=>assert.throws(()=>scope({indicators:[{code:'OPD'}]}),/end indicator/));

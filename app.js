@@ -4,22 +4,50 @@ const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const selected=()=> $('facility').value;
 const val=r=>!r?null:selected()==='all'?r.total:r.values[Number(selected())];
 const indicator=code=>data.indicators.find(r=>r.code===code);
-const metrics=[['MS_OPD_NumOV.1','Outpatient visits','Recorded visits · includes repeat visits','↗'],['MAT_ANC1_GA.1','First antenatal contacts','Women receiving a first ANC contact','♡'],['MAT_SBR.LB.','Live births','Reported live births','✧'],['EPI_DPT3.1.','Pentavalent · third dose','Children under one year vaccinated','✚']];
+let activeService='all';
+const metrics=[['MAT_CAR_Age','Family planning acceptors','New and repeat acceptors','♡'],['MAT_ANC1_GA.1','First antenatal contacts','Women receiving a first ANC contact','♡'],['MAT_SBR.LB.','Live births','Reported live births','✧'],['EPI_DPT3.1.','Pentavalent · third dose','Children under one year vaccinated','✚']];
+function serviceRows(){return data.indicators.filter(r=>activeService==='all'||r.section===activeService)}
+function highlights(){
+ const codes=activeService==='all'?metrics.map(m=>m[0]):({
+ 'Family planning':['MAT_CAR_Age','MAT_CAR_Age.1','MAT_CAR_Age.2','MAT_IPPCAR_Age'],
+ 'Comprehensive abortion care':['MAT_CAC_SAC','MAT_CAC_PAC','MAT_CAC.Tr.1','MAT_CAC.MA.1'],
+ 'Adolescent and youth health':['MAT_TngP_TPR','NUT_Adl&Yo.1','NUT_Adl&Yo_SUW','NUT_Adl&Yo_SObe'],
+ 'Antenatal care':['MAT_ANC1_GA.1','MAT_ANC4+_MA.1','MAT_ANC8+.','MAT_Hepa'],
+ 'Postnatal care':['MAT_EPNC.1','MAT_EPNC.1. 1','MAT_EPNC.1. 3','MAT_EPNC.1. 5'],
+ 'PMTCT':['MTCT_TST.1.','MTCT_ART.1.','MTCT_HEI_EID.1.1','MTCT_HEI_ABTST.1'],
+ 'ECD':['CH_CHDM','CH_CHDMS. 1','CH_CHDMS. 2','CH_CHDMS. 3'],
+ 'Nutrition':['NUT_VITA.1','NUT_DeW.1','NUT_U5SMN.1','NUT_U5SMN.SAM.1']
+ }[activeService]||serviceRows().filter(r=>r.total!==null).slice(0,4).map(r=>r.code));
+ return codes.map(c=>indicator(c)).filter(Boolean);
+}
 function render(){
- $('cards').innerHTML=metrics.map(([code,title,note,icon])=>`<article class="card"><div class="card-top">${title}<span class="card-icon">${icon}</span></div><div class="card-value">${fmt(val(indicator(code)))}</div><div class="card-note">${note}</div></article>`).join('');
- const opd=indicator('MS_OPD_NumOV.1');const sorted=data.facilities.map((name,i)=>({name,i,value:opd?.values[i]??null})).filter(x=>selected()==='all'||x.i===Number(selected())).sort((a,b)=>(b.value??-1)-(a.value??-1));const max=Math.max(1,...sorted.map(x=>x.value??0));
- $('bars').innerHTML=sorted.map(x=>`<div class="bar-row"><span class="bar-label" title="${escape(x.name)}">${escape(x.name.replace(' Health Center','').replace('_PHCU',''))}</span><div class="bar-track"><div class="bar-fill" style="width:${100*(x.value??0)/max}%"></div></div><span class="bar-number">${fmt(x.value)}</span></div>`).join('');
- const maternal=[['MAT_ANC1_GA.1','First antenatal contact'],['MAT_ANC4+_MA.1','Four or more ANC contacts'],['MAT_ANC8+.','Eight or more ANC contacts'],['MAT_SBR.LB.','Live births']].map(([c,n])=>({name:n,value:val(indicator(c))}));const maternalMax=Math.max(1,...maternal.map(x=>x.value??0));
- $('maternal').innerHTML=maternal.map((x,i)=>`<div class="maternal-item"><div class="maternal-info"><span>${x.name}</span><strong>${fmt(x.value)}</strong></div><div class="bar-track"><div class="bar-fill" style="width:${100*(x.value??0)/maternalMax}%;background:${['#365b3c','#6e9152','#a1ba73','#c1d498'][i]}"></div></div></div>`).join('');
+ const items=highlights();
+ $('cards').innerHTML=items.map(r=>`<article class="card"><div class="card-top">${escape(activeService==='all'?(metrics.find(m=>m[0]===r.code)?.[1]||r.name):r.name)}</div><div class="card-value">${fmt(val(r))}</div><div class="card-note">${escape(r.code)} · Reported count</div></article>`).join('');
+ const previous=$('chartMetric').value;$('chartMetric').replaceChildren();serviceRows().forEach(r=>$('chartMetric').add(new Option(r.name+' · '+r.code,r.code)));
+ if(serviceRows().some(r=>r.code===previous))$('chartMetric').value=previous;
+ renderBars();
+ const max=Math.max(1,...items.map(r=>val(r)??0));
+ $('maternal').innerHTML=items.map(r=>`<div class="maternal-item"><div class="maternal-info"><span>${escape(r.name)}</span><strong>${fmt(val(r))}</strong></div><div class="bar-track"><div class="bar-fill" style="width:${100*(val(r)??0)/max}%"></div></div></div>`).join('');
  $('valueHeading').textContent=selected()==='all'?'REPORTED TOTAL':'FACILITY VALUE'; filter();
 }
-function filter(){if(!data)return;page=0;const q=$('search').value.trim().toLowerCase();filtered=data.indicators.filter(r=>(!q||(r.code+' '+r.name).toLowerCase().includes(q))&&($('section').value==='all'||r.section===$('section').value)&&(!$('reported').checked||val(r)!==null));renderTable()}
+function renderBars(){
+ const r=indicator($('chartMetric').value);const sorted=data.facilities.map((name,i)=>({name,i,value:r?.values[i]??null})).filter(x=>selected()==='all'||x.i===Number(selected())).sort((a,b)=>(b.value??-1)-(a.value??-1));const max=Math.max(1,...sorted.map(x=>x.value??0));
+ $('bars').innerHTML=sorted.map(x=>`<div class="bar-row"><span class="bar-label" title="${escape(x.name)}">${escape(x.name.replace(' Health Center','').replace('_PHCU',''))}</span><div class="bar-track"><div class="bar-fill" style="width:${100*(x.value??0)/max}%"></div></div><span class="bar-number">${fmt(x.value)}</span></div>`).join('');
+}
+$('chartMetric').addEventListener('change',renderBars);
+function chooseService(service){
+ activeService=service;$('viewLabel').textContent=service==='all'?'Overview':service;
+ document.querySelectorAll('#serviceNav button').forEach(b=>{b.classList.toggle('active',b.dataset.service===service);b.setAttribute('aria-pressed',String(b.dataset.service===service))});
+ $('search').value='';$('section').value=service==='all'?'all':service;if(data)render();
+}
+['Overview',...MCH.categories].forEach((label,i)=>{const b=document.createElement('button');b.textContent=label;b.dataset.service=i?label:'all';b.onclick=()=>chooseService(b.dataset.service);$('serviceNav').append(b)});chooseService('all');
+function filter(){if(!data)return;page=0;const q=$('search').value.trim().toLowerCase();filtered=serviceRows().filter(r=>(!q||(r.code+' '+r.name).toLowerCase().includes(q))&&($('section').value==='all'||r.section===$('section').value)&&(!$('reported').checked||val(r)!==null));renderTable()}
 function renderTable(){
  $('rowCount').textContent=`${filtered.length.toLocaleString()} INDICATORS`;
  $('tbody').innerHTML=filtered.slice(page*size,(page+1)*size).map(r=>`<tr><td>${escape(r.name)}<small>${escape(r.code)}</small></td><td>${escape(r.section)}</td><td>${fmt(val(r))}</td><td>${r.values.filter(v=>v!==null).length} / ${data.facilities.length}</td></tr>`).join('')||'<tr><td colspan="4">No indicators match your filters.</td></tr>';
  $('pageInfo').textContent=filtered.length?`${page*size+1}–${Math.min((page+1)*size,filtered.length)} of ${filtered.length.toLocaleString()} indicators`:'0 indicators';$('prev').disabled=page===0;$('next').disabled=(page+1)*size>=filtered.length;
 }
-$('search').addEventListener('input',filter);$('section').addEventListener('change',filter);$('reported').addEventListener('change',filter);$('facility').addEventListener('change',()=>{if(data)render()});$('prev').onclick=()=>{page--;renderTable()};$('next').onclick=()=>{page++;renderTable()};
+$('search').addEventListener('input',filter);$('section').addEventListener('change',()=>chooseService($('section').value));$('reported').addEventListener('change',filter);$('facility').addEventListener('change',()=>{if(data)render()});$('prev').onclick=()=>{page--;renderTable()};$('next').onclick=()=>{page++;renderTable()};
 $('export').onclick=()=>{
  const cell=s=>'"'+String(s??'').replace(/"/g,'""')+'"';
  const rows=[['Code','Indicator','Category',selected()==='all'?'Reported total':data.facilities[Number(selected())],'Period'],...filtered.map(r=>[r.code,r.name,r.section,val(r),data.period])];
@@ -27,9 +55,9 @@ $('export').onclick=()=>{
 };
 function loadData(d){
  if(!Array.isArray(d.facilities)||!Array.isArray(d.indicators)||!d.facilities.length||!d.indicators.every(r=>typeof r.code==='string'&&typeof r.name==='string'&&typeof r.section==='string'&&Array.isArray(r.values)&&r.values.length===d.facilities.length&&r.values.every(v=>v===null||Number.isFinite(v))&&(r.total===null||Number.isFinite(r.total))))throw Error('Invalid dashboard JSON format');
- data=d;page=0;$('facilityCount').textContent=d.facilities.length+' health facilities';$('periodLabel').textContent=d.period||'Period not specified';$('search').value='';$('reported').checked=false;$('facility').length=1;$('section').length=1;
+ d=MCH.scope(d);data=d;activeService='all';page=0;$('facilityCount').textContent=d.facilities.length+' health facilities';$('periodLabel').textContent=d.period||'Period not specified';$('search').value='';$('reported').checked=false;$('facility').length=1;$('section').length=1;
  d.facilities.forEach((name,i)=>$('facility').add(new Option(name,i)));[...new Set(d.indicators.map(r=>r.section))].forEach(s=>$('section').add(new Option(s,s)));
- $('error').hidden=true;$('export').disabled=false;render();
+ $('error').hidden=true;$('export').disabled=false;chooseService('all');
 }
 $('export').disabled=true;
 $('dataFile').addEventListener('change',async e=>{

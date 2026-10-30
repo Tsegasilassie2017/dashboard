@@ -1,6 +1,6 @@
 # HealthScope KPI dashboard
 
-Dashboard of the supplied Monthly common dataset: 10 health facilities, 2,232 indicator rows, Hamle 2017–Sene 2018 in the Ethiopian calendar.
+Dashboard of the supplied Monthly common dataset: 10 health facilities, 398 maternal and child health indicator rows, Hamle 2017–Sene 2018 in the Ethiopian calendar.
 
 ## Run
 
@@ -21,3 +21,7 @@ The supplied .xls is an HTML table export. `data/indicators.json` preserves the 
 Select **Load Excel file** to prepare the dashboard directly from .xls or .xlsx files using the Monthly common dataset layout: S.No, Activity, facility columns, Total. HTML exports with an .xls extension are supported, including the original supplied export. Other spreadsheet layouts show a clear error instead of guessing KPI definitions. JSON remains supported. Files are processed locally and are never uploaded or included in Git. The period is read from the workbook title. Reloading clears the imported data. No automatic private-data request is made.
 
 Excel parsing uses the vendored `@e965/xlsx` 0.20.3 distribution (Apache-2.0, license in vendor/XLSX-LICENSE); its package SHA-512 was verified before extraction. No CDN request is needed.
+
+## Maternal and child health scope
+
+Excel and JSON imports include only rows through `NUT_Adl&Yo_SVObe_1.1. 4`, inclusive. The supplied export yields 398 rows. Imports missing that endpoint are rejected so unrelated services cannot silently appear. The sidebar filters cards, facility comparison, highlights, explorer, and CSV export by family planning, comprehensive abortion care, adolescent and youth health, antenatal care, postnatal care, PMTCT, EPI, child health, nutrition, and ECD. Adolescent nutrition is in adolescent and youth health; developmental milestone indicators are in ECD. Delivery and other maternal care remain in Overview. No overlapping service counts are summed.
