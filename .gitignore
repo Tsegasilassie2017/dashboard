@@ -1,0 +1,6 @@
+data/
+attachments/
+*.xls
+*.xlsx
+*.csv
+node_modules/
