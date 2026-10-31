@@ -48,14 +48,14 @@ RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
 
 Post-abortion family planning coverage Annual Plan = 0.9
 
-// Source-reported service counts for the uploaded aggregate period.
+// No matching indicator for this service was found in the supplied MCH data; related generic counts are not substituted.
 Adolescents and young people receiving integrated sexual and reproductive health information =
 VAR N = BLANK()
 RETURN N
 
 Adolescents and young people receiving integrated sexual and reproductive health information Annual Plan = 20400
 
-// Source-reported service counts for the uploaded aggregate period.
+// No matching indicator for this service was found in the supplied MCH data; related generic counts are not substituted.
 Adolescents and young people affected by gender-based violence linked to a one-stop center =
 VAR N = BLANK()
 VAR D = BLANK()
@@ -63,7 +63,7 @@ RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
 
 Adolescents and young people affected by gender-based violence linked to a one-stop center Annual Plan = 1
 
-// Source-reported service counts for the uploaded aggregate period.
+// No matching indicator for this service was found in the supplied MCH data; related generic counts are not substituted.
 Adolescents and young people screened for sexually transmitted infections =
 VAR N = BLANK()
 RETURN N
@@ -248,10 +248,10 @@ RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
 
 VLBW infants receiving kangaroo mother care (KMC) Annual Plan = 0.92
 
-// Resuscitation survival counts exist, but bag-and-mask method is not disaggregated.
+// The section NCH_CHIM_AsfxRS explicitly specifies bag-and-mask resuscitation. Survived / total resuscitated × 100.
 Newborns resuscitated with bag and mask who survive =
-VAR N = BLANK()
-VAR D = BLANK()
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), FILTER(ALL(Indicators), Indicators[Code] = "CH_ASPH.1.")), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), FILTER(ALL(Indicators), Indicators[Code] = "CH_ASPH.1.")))
+VAR D = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), FILTER(ALL(Indicators), Indicators[Code] = "CH_ASPH.2.")), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), FILTER(ALL(Indicators), Indicators[Code] = "CH_ASPH.2.")))
 RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
 
 Newborns resuscitated with bag and mask who survive Annual Plan = 0.92
@@ -292,9 +292,9 @@ RETURN N
 
 Fully immunized children Annual Plan = 22470
 
-// CH_TX_PNEU.1. counts pneumonia treatments but does not explicitly identify antibiotic recipients; antibiotic-specific numerator is required.
+// The workbook section CH_TX_PNEU explicitly defines under-five pneumonia antibiotic treatment; CH_TX_PNEU.1. provides the count.
 Under-five children treated with antibiotics for pneumonia =
-VAR N = BLANK()
+VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMOVEFILTERS(Indicators), FILTER(ALL(Indicators), Indicators[Code] = "CH_TX_PNEU.1.")), CALCULATE(SUM(ReportedTotals[Value]), REMOVEFILTERS(Indicators), FILTER(ALL(Indicators), Indicators[Code] = "CH_TX_PNEU.1.")))
 RETURN N
 
 Under-five children treated with antibiotics for pneumonia Annual Plan = 9105
@@ -314,7 +314,7 @@ RETURN IF(ISBLANK(N) || ISBLANK(D) || D = 0, BLANK(), DIVIDE(N, D))
 
 Under-five children receiving developmental monitoring through ECD at health facilities Annual Plan = 0.98
 
-// Source-reported service counts for the uploaded aggregate period.
+// No matching indicator for this service was found in the supplied MCH data; related generic counts are not substituted.
 Households receiving parental-coaching home visits =
 VAR N = BLANK()
 RETURN N

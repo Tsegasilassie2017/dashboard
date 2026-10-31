@@ -8,11 +8,11 @@
   if(totalIndex<3)throw Error('The table needs facility columns followed by a Total column.');
   const facilities=header.slice(2,totalIndex);if(facilities.some(x=>!x))throw Error('Facility names cannot be blank.');
   const number=(v,row)=>{if(v===null||v===undefined||clean(v)==='')return null;const n=Number(clean(v).replace(/,/g,''));if(!Number.isFinite(n))throw Error('Non-numeric value in '+row+'. Check the spreadsheet.');return n};
-  let section='General';const indicators=[];
+  let section='General',context=null;const indicators=[];
   for(const row of rows.slice(h+1)){
-   const code=clean(row[0]),name=clean(row[1]);if(!code||!name)continue;
-   if(row.length<=3){if(!code.includes('_')&&!code.includes('.'))section=name;continue}
-   indicators.push({code,name,section,values:facilities.map((_,i)=>number(row[i+2],code)),total:number(row[totalIndex],code)});
+   const code=clean(row[0]),name=clean(row[1]);if(!name)continue;
+   if(row.length<=3){context={code,name};if(!code.includes('_')&&!code.includes('.'))section=name;continue}
+   indicators.push({code,name,section,values:facilities.map((_,i)=>number(row[i+2],code)),total:number(row[totalIndex],code),...(context?{context}: {})});
   }
   if(!indicators.length)throw Error('No indicator rows found in this workbook.');
   const title=rows.slice(0,h).flat().map(clean).find(x=>x.includes('('))||'';

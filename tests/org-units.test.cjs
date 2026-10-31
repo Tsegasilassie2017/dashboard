@@ -1,0 +1,4 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const {normalize}=require('../org-units.js');
+const d={facilities:['Lemi Kura Sub City Health Office','A','B'],indicators:[{code:'X',values:[20,4,5],total:29},{code:'Y',values:[null,3,7],total:10}]};
+test('dedicated aggregate is used without adding lower-level facilities',()=>{const n=normalize(d);assert.deepEqual(n.facilities,['A','B']);assert.equal(n.indicators[0].total,20);assert.equal(n.indicators[0].exportTotal,29);assert.deepEqual(n.indicators[0].values,[4,5]);assert.equal(n.indicators[1].total,null);assert.equal(d.facilities.length,3);assert.deepEqual(normalize(n),n)});
+test('rejects duplicate aggregate columns',()=>assert.throws(()=>normalize({...d,facilities:['Lemi Kura Sub City Health Office','Lemi Kura Sub City Health Office']}),/More than one/));

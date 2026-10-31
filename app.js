@@ -28,7 +28,7 @@ function render(){
  const max=Math.max(1,...items.map(r=>val(r)??0));
  $('maternal').innerHTML=items.map(r=>`<div class="maternal-item"><div class="maternal-info"><span>${escape(r.name)}</span><strong>${fmt(val(r))}</strong></div><div class="bar-track"><div class="bar-fill" style="width:${100*(val(r)??0)/max}%"></div></div></div>`).join('');
  renderMeasures();
- $('valueHeading').textContent=selected()==='all'?'REPORTED TOTAL':'FACILITY VALUE'; filter();
+ $('valueHeading').textContent=selected()==='all'?(data.aggregate?'SUBCITY TOTAL':'REPORTED TOTAL'):'FACILITY VALUE'; filter();
 }
 function renderBars(){
  const r=indicator($('chartMetric').value);const sorted=data.facilities.map((name,i)=>({name,i,value:r?.values[i]??null})).filter(x=>selected()==='all'||x.i===Number(selected())).sort((a,b)=>(b.value??-1)-(a.value??-1));const max=Math.max(1,...sorted.map(x=>x.value??0));
@@ -55,7 +55,7 @@ $('export').onclick=()=>{
 };
 function loadData(d){
  if(!Array.isArray(d.facilities)||!Array.isArray(d.indicators)||!d.facilities.length||!d.indicators.every(r=>typeof r.code==='string'&&typeof r.name==='string'&&typeof r.section==='string'&&Array.isArray(r.values)&&r.values.length===d.facilities.length&&r.values.every(v=>v===null||Number.isFinite(v))&&(r.total===null||Number.isFinite(r.total))))throw Error('Invalid dashboard JSON format');
- d=MCH.scope(d);data=d;activeService='all';page=0;$('facilityCount').textContent=d.facilities.length+' health facilities';$('periodLabel').textContent=d.period||'Period not specified';$('search').value='';$('reported').checked=false;$('facility').length=1;$('section').length=1;
+ d=MCH.scope(OrgUnits.normalize(d));data=d;activeService='all';page=0;$('facilityCount').textContent=d.facilities.length+' health facilities';$('facility').options[0].textContent=d.aggregate?.name||'All facilities';$('orgNote').textContent=d.aggregate?'Subcity dashboard: '+d.aggregate.name+'. Its dedicated column is used directly; it is excluded from facility charts and sums. Export totals that combine both levels are not used.':'Subcity column not present: using source-reported totals without recalculating them.';$('periodLabel').textContent=d.period||'Period not specified';$('search').value='';$('reported').checked=false;$('facility').length=1;$('section').length=1;
  d.facilities.forEach((name,i)=>$('facility').add(new Option(name,i)));[...new Set(d.indicators.map(r=>r.section))].forEach(s=>$('section').add(new Option(s,s)));
  $('error').hidden=true;$('export').disabled=false;chooseService('all');
 }
