@@ -22,7 +22,6 @@ function highlights(){
 }
 function render(){
  const items=highlights();
- $('cards').innerHTML=items.map(r=>`<article class="card"><div class="card-top">${escape(activeService==='all'?(metrics.find(m=>m[0]===r.code)?.[1]||r.name):r.name)}</div><div class="card-value">${fmt(val(r))}</div><div class="card-note">${escape(r.code)} · Reported count</div></article>`).join('');
  const previous=$('chartMetric').value;$('chartMetric').replaceChildren();serviceRows().forEach(r=>$('chartMetric').add(new Option(r.name+' · '+r.code,r.code)));
  if(serviceRows().some(r=>r.code===previous))$('chartMetric').value=previous;
  renderBars();
@@ -52,7 +51,7 @@ $('search').addEventListener('input',filter);$('section').addEventListener('chan
 $('export').onclick=()=>{
  const cell=s=>'"'+String(s??'').replace(/"/g,'""')+'"';
  const rows=[['Code','Indicator','Category',selected()==='all'?'Reported total':data.facilities[Number(selected())],'Period'],...filtered.map(r=>[r.code,r.name,r.section,val(r),data.period])];
- const csv=rows.map(r=>r.map(v=>cell(typeof v==='string'&&/^[=+@\-]/.test(v)?"'"+v:v)).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='healthscope-indicators.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ const csv=rows.map(r=>r.map(v=>cell(typeof v==='string'&&/^[=+@\-]/.test(v)?"'"+v:v)).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='lemi-kura-mch-indicators.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 function loadData(d){
  if(!Array.isArray(d.facilities)||!Array.isArray(d.indicators)||!d.facilities.length||!d.indicators.every(r=>typeof r.code==='string'&&typeof r.name==='string'&&typeof r.section==='string'&&Array.isArray(r.values)&&r.values.length===d.facilities.length&&r.values.every(v=>v===null||Number.isFinite(v))&&(r.total===null||Number.isFinite(r.total))))throw Error('Invalid dashboard JSON format');

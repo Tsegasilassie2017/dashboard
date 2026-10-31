@@ -1,4 +1,4 @@
-# HealthScope KPI dashboard
+# Lemi kura subcity health office MCH
 
 Dashboard of the supplied Monthly common dataset: 10 health facilities, 398 maternal and child health indicator rows, Hamle 2017–Sene 2018 in the Ethiopian calendar.
 
@@ -26,10 +26,12 @@ Excel parsing uses the vendored `@e965/xlsx` 0.20.3 distribution (Apache-2.0, li
 
 Excel and JSON imports include only rows through `NUT_Adl&Yo_SVObe_1.1. 4`, inclusive. The supplied export yields 398 rows. Imports missing that endpoint are rejected so unrelated services cannot silently appear. The sidebar filters cards, facility comparison, highlights, explorer, and CSV export by family planning, comprehensive abortion care, adolescent and youth health, antenatal care, postnatal care, PMTCT, EPI, child health, nutrition, and ECD. Adolescent nutrition is in adolescent and youth health; developmental milestone indicators are in ECD. Delivery and other maternal care remain in Overview. No overlapping service counts are summed.
 
-## Calculated measures and data quality
+## Annual-plan KPIs
 
-The performance panel provides 18 documented ratios across all ten service areas. Each measure includes its exact numerator/denominator, source inputs, interpretation, and an optional local target. Facility comparison bars display ratios, with local target markers; negative/out-of-range values stay visible and flagged (bar lengths use absolute magnitude; signed values are labeled). Export measures includes inputs, percent, formula, interpretation and status. Targets are held in browser memory only. Missing inputs and zero denominators remain not calculable; percentages are never capped. The palette is DHIS2-inspired rather than a claimed universal official DHIS2 palette.
+The dashboard contains the 52 user-supplied KPIs and exact annual plans, grouped under the relevant service areas. Plans distinguish counts from percentages and minimum performance from maximum adverse-outcome thresholds. The KPI cards appear above visualizations and data-quality checks.
 
-Quality checks show nonblank cell availability, negative values, and reconciliation of source totals against fully observed facility rows. Ratio review flags can reflect reporting errors, catchment flows or nonaligned cohorts; they are not automatic proof of invalid data. Completeness of expected DHIS2 dataset submissions, population coverage, monthly trends and population-based mortality rates cannot be inferred from this aggregate workbook.
+Excel and JSON imports remain limited to the requested MCH endpoint. Some planned KPIs cannot be derived from this file: they show their plan, available numerator where applicable, and an explanation of missing inputs or incompatible definitions. No unrelated proxy replaces six-week DBS, VLBW-specific KMC, bag-and-mask resuscitation, unique mothers, adolescent population denominators, or household coaching. Formula notes identify operational assumptions for calculable ratios.
 
-The browser runs JavaScript formulas. Matching DAX and Power BI modeling instructions are in [powerbi/README.md](powerbi/README.md). DAX has not been executed in a Power BI engine here. Do not combine the Total column with facility values when building that model.
+Count-plan achievement is shown only for All facilities after checking that the uploaded period matches the annual plan. No monthly prorating is inferred, and no subcity count plan is assigned to a single facility. Percentage targets are compared with observed ratios, retaining invalid/out-of-range results for review. Blanks are not zeros, including components of sums. Actuals, annual plans, units, formula notes and assessment status are exported with Export KPIs.
+
+Brand: Lemi kura subcity health office MCH. Subtitle: Data Quality and Performance monitoring. Footer: developed by Tsegasilassie Gebremariam. DAX/model downloads are removed from the dashboard interface. Updated offline Power BI definitions remain in powerbi/ for technical use; they have not been executed in a Power BI engine here.
