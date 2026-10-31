@@ -392,3 +392,185 @@ VAR N = IF(ISCROSSFILTERED(Facilities), CALCULATE(SUM(Observations[Value]), REMO
 RETURN N
 
 Under-five children receiving nutrition screening Annual Plan = 29413
+
+// Automatic period-plan measures (single aggregate period).
+
+Postpartum family planning acceptors Period Plan =
+[Postpartum family planning acceptors Annual Plan]
+
+Family planning acceptors Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Family planning acceptors Annual Plan] * DIVIDE(Months, 12))
+
+Long-acting family planning coverage Period Plan =
+[Long-acting family planning coverage Annual Plan]
+
+Premature removal of long-acting family planning methods within six months Period Plan =
+[Premature removal of long-acting family planning methods within six months Annual Plan]
+
+Safe abortion care Period Plan =
+[Safe abortion care Annual Plan]
+
+Post-abortion family planning coverage Period Plan =
+[Post-abortion family planning coverage Annual Plan]
+
+Adolescents and young people receiving integrated sexual and reproductive health information Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Adolescents and young people receiving integrated sexual and reproductive health information Annual Plan] * DIVIDE(Months, 12))
+
+Adolescents and young people affected by gender-based violence linked to a one-stop center Period Plan =
+[Adolescents and young people affected by gender-based violence linked to a one-stop center Annual Plan]
+
+Adolescents and young people screened for sexually transmitted infections Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Adolescents and young people screened for sexually transmitted infections Annual Plan] * DIVIDE(Months, 12))
+
+Adolescents and young people screened for malnutrition Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Adolescents and young people screened for malnutrition Annual Plan] * DIVIDE(Months, 12))
+
+Mothers receiving postnatal care Period Plan =
+[Mothers receiving postnatal care Annual Plan]
+
+Mother-to-child HIV transmission rate among children under 18 months Period Plan =
+[Mother-to-child HIV transmission rate among children under 18 months Annual Plan]
+
+Pregnancy rate among adolescents aged 19 years or younger Period Plan =
+[Pregnancy rate among adolescents aged 19 years or younger Annual Plan]
+
+Children protected at birth (PAB) Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children protected at birth (PAB) Annual Plan] * DIVIDE(Months, 12))
+
+Institutional maternal death rate Period Plan =
+[Institutional maternal death rate Annual Plan]
+
+Stillbirth rate Period Plan =
+[Stillbirth rate Annual Plan]
+
+Institutional neonatal death rate among live births Period Plan =
+[Institutional neonatal death rate among live births Annual Plan]
+
+Mothers receiving ANC1 Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Mothers receiving ANC1 Annual Plan] * DIVIDE(Months, 12))
+
+Mothers receiving ANC4 or more visits Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Mothers receiving ANC4 or more visits Annual Plan] * DIVIDE(Months, 12))
+
+ANC dropout rate from ANC1 to ANC4 Period Plan =
+[ANC dropout rate from ANC1 to ANC4 Annual Plan]
+
+Mothers receiving ANC8 or more visits Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Mothers receiving ANC8 or more visits Annual Plan] * DIVIDE(Months, 12))
+
+Skilled birth attendance Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Skilled birth attendance Annual Plan] * DIVIDE(Months, 12))
+
+Uterotonic coverage after delivery Period Plan =
+[Uterotonic coverage after delivery Annual Plan]
+
+Postpartum haemorrhage (PPH) Period Plan =
+[Postpartum haemorrhage (PPH) Annual Plan]
+
+ANC1 clients tested for syphilis Period Plan =
+[ANC1 clients tested for syphilis Annual Plan]
+
+ANC1 clients tested for hepatitis B (HBV B&C) Period Plan =
+[ANC1 clients tested for hepatitis B (HBV B&C) Annual Plan]
+
+Pregnant and lactating women tested for HIV who know their status Period Plan =
+[Pregnant and lactating women tested for HIV who know their status Annual Plan]
+
+HIV-positive pregnant, postpartum, and lactating mothers receiving ART Period Plan =
+[HIV-positive pregnant, postpartum, and lactating mothers receiving ART Annual Plan]
+
+HIV-exposed infants receiving prophylaxis Period Plan =
+[HIV-exposed infants receiving prophylaxis Annual Plan]
+
+HIV positivity among HIV-exposed infants tested by DBS at six weeks Period Plan =
+[HIV positivity among HIV-exposed infants tested by DBS at six weeks Annual Plan]
+
+ANC clients’ partners tested for HIV Period Plan =
+[ANC clients’ partners tested for HIV Annual Plan]
+
+VLBW infants receiving kangaroo mother care (KMC) Period Plan =
+[VLBW infants receiving kangaroo mother care (KMC) Annual Plan]
+
+Newborns resuscitated with bag and mask who survive Period Plan =
+[Newborns resuscitated with bag and mask who survive Annual Plan]
+
+Pregnant women screened for malnutrition Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Pregnant women screened for malnutrition Annual Plan] * DIVIDE(Months, 12))
+
+Pregnant women receiving deworming Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Pregnant women receiving deworming Annual Plan] * DIVIDE(Months, 12))
+
+Pregnant women receiving 90 or more iron-folate tablets Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Pregnant women receiving 90 or more iron-folate tablets Annual Plan] * DIVIDE(Months, 12))
+
+Children cured after treatment for severe acute malnutrition (SAM) Period Plan =
+[Children cured after treatment for severe acute malnutrition (SAM) Annual Plan]
+
+Fully immunized children Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Fully immunized children Annual Plan] * DIVIDE(Months, 12))
+
+Under-five children treated with antibiotics for pneumonia Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Under-five children treated with antibiotics for pneumonia Annual Plan] * DIVIDE(Months, 12))
+
+Under-five children with diarrhea receiving ORS and zinc or ORS Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Under-five children with diarrhea receiving ORS and zinc or ORS Annual Plan] * DIVIDE(Months, 12))
+
+Under-five children receiving developmental monitoring through ECD at health facilities Period Plan =
+[Under-five children receiving developmental monitoring through ECD at health facilities Annual Plan]
+
+Households receiving parental-coaching home visits Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Households receiving parental-coaching home visits Annual Plan] * DIVIDE(Months, 12))
+
+Children receiving Penta 1 Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children receiving Penta 1 Annual Plan] * DIVIDE(Months, 12))
+
+Children receiving Penta 3 Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children receiving Penta 3 Annual Plan] * DIVIDE(Months, 12))
+
+Penta vaccination dropout rate Period Plan =
+[Penta vaccination dropout rate Annual Plan]
+
+Children receiving MCV1 Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children receiving MCV1 Annual Plan] * DIVIDE(Months, 12))
+
+Children receiving MCV2 Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children receiving MCV2 Annual Plan] * DIVIDE(Months, 12))
+
+Low birth weight among live-born infants who were weighed Period Plan =
+[Low birth weight among live-born infants who were weighed Annual Plan]
+
+Children aged 6–59 months receiving vitamin A twice yearly Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children aged 6–59 months receiving vitamin A twice yearly Annual Plan] * DIVIDE(Months, 12))
+
+Children aged 24–59 months receiving deworming twice yearly Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children aged 24–59 months receiving deworming twice yearly Annual Plan] * DIVIDE(Months, 12))
+
+Children under two receiving monthly growth monitoring and promotion Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Children under two receiving monthly growth monitoring and promotion Annual Plan] * DIVIDE(Months, 12))
+
+Under-five children receiving nutrition screening Period Plan =
+VAR Months = SELECTEDVALUE(Periods[MonthCount])
+RETURN IF(ISBLANK(Months) || Months < 1 || Months > 12 || Months <> INT(Months), BLANK(), [Under-five children receiving nutrition screening Annual Plan] * DIVIDE(Months, 12))

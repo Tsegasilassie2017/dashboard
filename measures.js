@@ -721,7 +721,8 @@
  return {...p,n,d,value:n===null||(p.kind!=='count'&&(d===null||d===0))?null:p.kind==='count'?n:n/d*100,inferred:inferredInputs(data,[p.numerator,p.denominator],facility)};
  }
  function formula(m){const ref=x=>Array.isArray(x)?x.length?'('+x.join(' + ')+')':'Required eligible denominator':x||'Required matching numerator';return m.kind==='count'?ref(m.numerator):m.kind==='dropout'?'('+ref(m.denominator)+' − '+ref(m.numerator)+') / '+ref(m.denominator)+' × 100':ref(m.numerator)+' / '+ref(m.denominator)+' × 100'}
- function calculate(data,m,facility='all',target=null,annualConfirmed=false){
+ function periodPlan(m,months){if(m.kind!=='count')return m.target;return Number.isInteger(months)&&months>=1&&months<=12?m.target*months/12:null;}
+ function calculate(data,m,facility='all',target=null,months=null){
  const n=read(data,m.numerator,facility),d=m.kind==='count'?null:read(data,m.denominator,facility);
  if(m.requiredContext){const row=data.indicators.find(r=>norm(r.code)===norm(m.requiredContext.code));if(!new RegExp(m.requiredContext.pattern,'i').test(row?.context?.name||''))return {value:null,n,d,status:'missing',label:'Needs explicit service context',achievement:null};}
  if(n===null||(m.kind!=='count'&&d===null))return {value:null,n,d,status:'missing',label:'Needs matching data / definition',achievement:null};
@@ -729,11 +730,11 @@
  if(m.kind==='count'&&!Number.isInteger(n))return {value:n,n,d,status:'invalid',label:'Fractional count; review source',achievement:null};
  const value=m.kind==='count'?n:(m.kind==='dropout'?d-n:n)/d*100;
  if(n<0||(d!==null&&d<0)||value<0||(m.kind!=='count'&&value>100))return {value,n,d,status:'invalid',label:'Review data / period alignment',achievement:null};
- if(m.kind==='count'&&(facility!=='all'||!annualConfirmed))return {value,n,d,status:'neutral',label:facility!=='all'?'Subcity plan; facility allocation required':'Confirm annual-plan period to assess',achievement:null};
- target=target??m.target;
+ if(m.kind==='count'&&(facility!=='all'||!Number.isInteger(months)||months<1||months>12))return {value,n,d,status:'neutral',label:facility!=='all'?'Subcity plan; facility allocation required':'Select reporting months to assess',achievement:null};
+ target=target??periodPlan(m,months);
  if(!Number.isFinite(target))return {value,n,d,status:'neutral',label:'No target set',achievement:null};
  const met=m.direction==='lower'?value<=target:value>=target;
- return {value,n,d,status:met?'good':'warning',label:met?'Meets annual plan':'Outside annual plan',achievement:m.kind==='count'?value/target*100:null};
+ return {value,n,d,status:met?'good':'warning',label:met?'Meets period plan':'Outside period plan',achievement:m.kind==='count'?value/target*100:null};
  }
  function quality(data,rows,facility='all'){
  const indices=facility==='all'?data.facilities.map((_,i)=>i):[Number(facility)];
@@ -741,5 +742,5 @@
  for(const r of rows){if(r.total!==null&&r.values.every(v=>v!==null)){checked++;if(Math.abs(r.values.reduce((a,b)=>a+b,0)-r.total)>0.01)mismatch++}}
  return {name:data.facilities[i],reported,expected:cells.length,nonblank:cells.length?reported/cells.length*100:null,negatives,mismatch,checked};});
  }
- root.Measures={defs,read,calculate,quality,formula,related,inferredInputs};if(typeof module!=='undefined')module.exports=root.Measures;
+ root.Measures={defs,read,calculate,quality,formula,related,inferredInputs,periodPlan};if(typeof module!=='undefined')module.exports=root.Measures;
 })(globalThis);
